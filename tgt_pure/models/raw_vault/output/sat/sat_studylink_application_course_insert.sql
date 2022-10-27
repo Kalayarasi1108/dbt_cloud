@@ -1,0 +1,302 @@
+INSERT INTO DATA_VAULT.CORE.SAT_STUDYLINK_APPLICATION_COURSE (SAT_STUDYLINK_APPLICATION_COURSE_SK,
+                                                              HUB_STUDYLINK_APPLICATION_COURSE_KEY, SOURCE, LOAD_DTS,
+                                                              ETL_JOB_ID, HASH_MD5, APPLICATIONID,
+                                                              COURSE_NAME,
+                                                              COURSE_CODE,
+                                                              COURSE_SUBTITLE,
+                                                              COURSE_SUBCODE,
+                                                              COURSE_TYPE,
+                                                              COURSE_CAMPUS,
+                                                              COURSE_CRICOS_CODE,
+                                                              INSTITUTION_NAME,
+                                                              INSTITUTION_CODE,
+                                                              DEPARTMENT_NAME,
+                                                              DEPARTMENT_CODE,
+                                                              PREFERENCEFIELDS_DEPARTMENTCODE2,
+                                                              PREFERENCEFIELDS_NATIONALCOMMENT,
+                                                              PREFERENCEFIELDS_INTERNATIONALCOMMENT,
+                                                              PREFERENCEFIELDS_UACCODE, PREFERENCEFIELDS_COURSEVERSION,
+                                                              PREFERENCEFIELDS_ALLOWINTERNATIONAL,
+                                                              PREFERENCEFIELDS_HASQUOTA, PREFERENCEFIELDS_PREFUID,
+                                                              CAMPUS_DESC, CAMPUS_CODE,
+                                                              INTAKE_CODE, INTAKE_DESC,
+                                                              INTAKE_UNITNUMBER,
+                                                              INTAKE_YEAR, PREFERENCEFIELDS_MAJORCODE,
+                                                              PREFERENCEFIELDS_MAJORDESC,
+                                                              PREFERENCEFIELDS_AVAILABILITYCODE,
+                                                              INTAKE_DURATION,
+                                                              INTAKE_STARTDATE,
+                                                              PREFERENCEFIELDS_COURSECAMPUSSIMPLE,
+                                                              AWARD_CODE,
+                                                              AWARD_DESCRIPTION,
+                                                              STUDY_TYPE_CODE,
+                                                              STUDY_TYPE_DESCRIPTION,
+                                                              PREFERENCEFIELDS_INSTITUTIONCUSTOMID,
+                                                              PREFERENCEFIELDS_INSTITUTIONABBREVIATION,
+                                                              PREFERENCEFIELDS_OFFERPRIORCREDIT,
+                                                              PREFERENCEFIELDS_RPLCREDITS,
+                                                              PREFERENCEFIELDS_RPLSEMESTERS,
+                                                              PREFERENCEFIELDS_RPLSEMESTERSREMAINING,
+                                                              PREFERENCEFIELDS_RPLSTATUS,
+                                                              PREFERENCEFIELDS_RPLYEARSREMAINING,
+                                                              PREFERENCEFIELDS_RPLCOMMENTS, PREFERENCEFIELDS_RPLTYPE,
+                                                              PREFERENCEFIELDS_RPLTYPEEXPORT, PREFERENCEFIELDS_RPLUNITS,
+                                                              PREFERENCEFIELDS_ASSESSMENTCOMMENTS,
+                                                              PREFERENCEFIELDS_COENUMBER, PREFERENCEFIELDS_COEDATE,
+                                                              PREFERENCEFIELDS_PREF_BASISOFADMISSION,
+                                                              PREFERENCEFIELDS_PREF_BASISOFADMISSIONEXPORT, IS_DELETED)
+SELECT DATA_VAULT.CORE.SEQ.NEXTVAL                          SAT_STUDYLINK_APPLICATION_COURSE_SK,
+       MD5(V.DF_APPLICATIONDETAILS_APPLICATIONID || ',' ||
+           IFNULL(V.PREFERENCEFIELDS_CUSTOMCOURSECODE, '')) HUB_STUDYLINK_APPLICATION_COURSE_KEY,
+       'STUDYLINK'                                          SOURCE,
+       CURRENT_TIMESTAMP::TIMESTAMP_NTZ                     LOAD_DTS,
+       'SQL' || CURRENT_TIMESTAMP::TIMESTAMP_NTZ            ETL_JOB_ID,
+       MD5(
+                   IFNULL(DF_APPLICATIONDETAILS_APPLICATIONID, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSENAME, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_CUSTOMCOURSECODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSESUBTITLE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSESUBCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSETYPE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSECAMPUS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSECRICOSCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INSTITUTIONNAME, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INSTITUTIONCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_DEPARTMENTNAME, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_DEPARTMENTCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_DEPARTMENTCODE2, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_NATIONALCOMMENT, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTERNATIONALCOMMENT, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_UACCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSEVERSION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_ALLOWINTERNATIONAL, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_HASQUOTA, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_PREFUID, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_CAMPUSDESC, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_CAMPUSCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKECODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKEDESC, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKE_UNITNUMBER, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKE_YEAR, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_MAJORCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_MAJORDESC, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_AVAILABILITYCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKE_DURATION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKE_STARTDATE, TO_TIMESTAMP_NTZ('1900', 'YYYY')) || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSECAMPUSSIMPLE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_AWARDCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_AWARDDESCRIPTION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_STUDYTYPECODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_STUDYTYPEDESCRIPTION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INSTITUTIONCUSTOMID, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INSTITUTIONABBREVIATION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_OFFERPRIORCREDIT, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLCREDITS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLSEMESTERS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLSEMESTERSREMAINING, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLSTATUS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLYEARSREMAINING, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLCOMMENTS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLTYPE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLTYPEEXPORT, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLUNITS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_ASSESSMENTCOMMENTS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COENUMBER, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COEDATE, TO_TIMESTAMP_NTZ('1900', 'YYYY')) || ',' ||
+                   IFNULL(PREFERENCEFIELDS_PREF_BASISOFADMISSION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_PREF_BASISOFADMISSIONEXPORT, '') || ',' ||
+                   IFNULL('N', '')
+           )                                                HASH_MD5,
+       DF_APPLICATIONDETAILS_APPLICATIONID APPLICATIONID,
+       PREFERENCEFIELDS_COURSENAME COURSE_NAME,
+       PREFERENCEFIELDS_CUSTOMCOURSECODE COURSE_CODE,
+       PREFERENCEFIELDS_COURSESUBTITLE COURSE_SUBTITLE,
+       PREFERENCEFIELDS_COURSESUBCODE COURSE_SUBCODE,
+       PREFERENCEFIELDS_COURSETYPE COURSE_TYPE,
+       PREFERENCEFIELDS_COURSECAMPUS COURSE_CAMPUS,
+       PREFERENCEFIELDS_COURSECRICOSCODE COURSE_CRICOS_CODE,
+       PREFERENCEFIELDS_INSTITUTIONNAME INSTITUTION_NAME,
+       PREFERENCEFIELDS_INSTITUTIONCODE INSTITUTION_CODE,
+       PREFERENCEFIELDS_DEPARTMENTNAME DEPARTMENT_NAME,
+       PREFERENCEFIELDS_DEPARTMENTCODE DEPARTMENT_CODE,
+       PREFERENCEFIELDS_DEPARTMENTCODE2,
+       PREFERENCEFIELDS_NATIONALCOMMENT,
+       PREFERENCEFIELDS_INTERNATIONALCOMMENT,
+       PREFERENCEFIELDS_UACCODE,
+       PREFERENCEFIELDS_COURSEVERSION,
+       PREFERENCEFIELDS_ALLOWINTERNATIONAL,
+       PREFERENCEFIELDS_HASQUOTA,
+       PREFERENCEFIELDS_PREFUID,
+       PREFERENCEFIELDS_CAMPUSDESC CAMPUS_DESC,
+       PREFERENCEFIELDS_CAMPUSCODE CAMPUS_CODE,
+       PREFERENCEFIELDS_INTAKECODE INTAKE_CODE,
+       PREFERENCEFIELDS_INTAKEDESC INTAKE_DESC,
+       PREFERENCEFIELDS_INTAKE_UNITNUMBER INTAKE_UNITNUMBER,
+       PREFERENCEFIELDS_INTAKE_YEAR INTAKE_YEAR,
+       PREFERENCEFIELDS_MAJORCODE,
+       PREFERENCEFIELDS_MAJORDESC,
+       PREFERENCEFIELDS_AVAILABILITYCODE,
+       PREFERENCEFIELDS_INTAKE_DURATION INTAKE_DURATION,
+       PREFERENCEFIELDS_INTAKE_STARTDATE INTAKE_STARTDATE,
+       PREFERENCEFIELDS_COURSECAMPUSSIMPLE,
+       PREFERENCEFIELDS_AWARDCODE AWARD_CODE,
+       PREFERENCEFIELDS_AWARDDESCRIPTION AWARD_DESCRIPTION,
+       PREFERENCEFIELDS_STUDYTYPECODE STUDY_TYPE_CODE,
+       PREFERENCEFIELDS_STUDYTYPEDESCRIPTION STUDY_TYPE_DESCRIPTION,
+       PREFERENCEFIELDS_INSTITUTIONCUSTOMID,
+       PREFERENCEFIELDS_INSTITUTIONABBREVIATION,
+       PREFERENCEFIELDS_OFFERPRIORCREDIT,
+       PREFERENCEFIELDS_RPLCREDITS,
+       PREFERENCEFIELDS_RPLSEMESTERS,
+       PREFERENCEFIELDS_RPLSEMESTERSREMAINING,
+       PREFERENCEFIELDS_RPLSTATUS,
+       PREFERENCEFIELDS_RPLYEARSREMAINING,
+       PREFERENCEFIELDS_RPLCOMMENTS,
+       PREFERENCEFIELDS_RPLTYPE,
+       PREFERENCEFIELDS_RPLTYPEEXPORT,
+       PREFERENCEFIELDS_RPLUNITS,
+       PREFERENCEFIELDS_ASSESSMENTCOMMENTS,
+       PREFERENCEFIELDS_COENUMBER,
+       PREFERENCEFIELDS_COEDATE,
+       PREFERENCEFIELDS_PREF_BASISOFADMISSION,
+       PREFERENCEFIELDS_PREF_BASISOFADMISSIONEXPORT,
+       'N'                                                  IS_DELETED
+FROM (SELECT DF_APPLICATIONDETAILS_APPLICATIONID,
+             PREFERENCEFIELDS_COURSENAME,
+             PREFERENCEFIELDS_CUSTOMCOURSECODE,
+             PREFERENCEFIELDS_COURSESUBTITLE,
+             PREFERENCEFIELDS_COURSESUBCODE,
+             PREFERENCEFIELDS_COURSETYPE,
+             PREFERENCEFIELDS_COURSECAMPUS,
+             PREFERENCEFIELDS_COURSECRICOSCODE,
+             PREFERENCEFIELDS_INSTITUTIONNAME,
+             PREFERENCEFIELDS_INSTITUTIONCODE,
+             PREFERENCEFIELDS_DEPARTMENTNAME,
+             PREFERENCEFIELDS_DEPARTMENTCODE,
+             PREFERENCEFIELDS_DEPARTMENTCODE2,
+             PREFERENCEFIELDS_NATIONALCOMMENT,
+             PREFERENCEFIELDS_INTERNATIONALCOMMENT,
+             PREFERENCEFIELDS_UACCODE,
+             PREFERENCEFIELDS_COURSEVERSION,
+             PREFERENCEFIELDS_ALLOWINTERNATIONAL,
+             PREFERENCEFIELDS_HASQUOTA,
+             PREFERENCEFIELDS_PREFUID,
+             PREFERENCEFIELDS_CAMPUSDESC,
+             PREFERENCEFIELDS_CAMPUSCODE,
+             PREFERENCEFIELDS_INTAKECODE,
+             PREFERENCEFIELDS_INTAKEDESC,
+             PREFERENCEFIELDS_INTAKE_UNITNUMBER,
+             PREFERENCEFIELDS_INTAKE_YEAR,
+             PREFERENCEFIELDS_MAJORCODE,
+             PREFERENCEFIELDS_MAJORDESC,
+             PREFERENCEFIELDS_AVAILABILITYCODE,
+             PREFERENCEFIELDS_INTAKE_DURATION,
+             CASE
+                 WHEN REGEXP_LIKE(PREFERENCEFIELDS_INTAKE_STARTDATE, '\\d{1,2}-\\w{3}-\\d{2}')
+                     THEN TO_DATE(PREFERENCEFIELDS_INTAKE_STARTDATE, 'DD-Mon-YY')
+                 WHEN REGEXP_LIKE(PREFERENCEFIELDS_INTAKE_STARTDATE, '\\d{1,2}-\\w{3}-\\d{4}')
+                     THEN TO_DATE(PREFERENCEFIELDS_INTAKE_STARTDATE, 'DD-Mon-YYYY')
+                 WHEN REGEXP_LIKE(PREFERENCEFIELDS_INTAKE_STARTDATE, '\\d{1,2}/\\d{1,2}/\\d{4}')
+                     then TO_DATE(PREFERENCEFIELDS_INTAKE_STARTDATE, 'DD/MM/YYYY')
+                 WHEN REGEXP_LIKE(PREFERENCEFIELDS_INTAKE_STARTDATE, '\\d{1,2}/\\d{1,2}/\\d{2}')
+                     then TO_DATE(PREFERENCEFIELDS_INTAKE_STARTDATE, 'DD/MM/YY')
+                 WHEN REGEXP_LIKE(PREFERENCEFIELDS_INTAKE_STARTDATE, '\\d{4}/\\d{1,2}/\\d{1,2}')
+                     then TO_DATE(PREFERENCEFIELDS_INTAKE_STARTDATE, 'YYYY/MM/DD')
+                 WHEN REGEXP_LIKE(PREFERENCEFIELDS_INTAKE_STARTDATE, '\\d{4}-\\d{1,2}-\\d{1,2}')
+                     then TO_DATE(PREFERENCEFIELDS_INTAKE_STARTDATE, 'YYYY-MM-DD')
+                 ELSE NULL
+                 END                                                                          PREFERENCEFIELDS_INTAKE_STARTDATE,
+             PREFERENCEFIELDS_COURSECAMPUSSIMPLE,
+             PREFERENCEFIELDS_AWARDCODE,
+             PREFERENCEFIELDS_AWARDDESCRIPTION,
+             PREFERENCEFIELDS_STUDYTYPECODE,
+             PREFERENCEFIELDS_STUDYTYPEDESCRIPTION,
+             PREFERENCEFIELDS_INSTITUTIONCUSTOMID,
+             PREFERENCEFIELDS_INSTITUTIONABBREVIATION,
+             PREFERENCEFIELDS_OFFERPRIORCREDIT,
+             PREFERENCEFIELDS_RPLCREDITS,
+             PREFERENCEFIELDS_RPLSEMESTERS,
+             PREFERENCEFIELDS_RPLSEMESTERSREMAINING,
+             PREFERENCEFIELDS_RPLSTATUS,
+             PREFERENCEFIELDS_RPLYEARSREMAINING,
+             PREFERENCEFIELDS_RPLCOMMENTS,
+             PREFERENCEFIELDS_RPLTYPE,
+             PREFERENCEFIELDS_RPLTYPEEXPORT,
+             PREFERENCEFIELDS_RPLUNITS,
+             PREFERENCEFIELDS_ASSESSMENTCOMMENTS,
+             PREFERENCEFIELDS_COENUMBER,
+             IFF(REGEXP_LIKE(PREFERENCEFIELDS_COEDATE, '\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.0'),
+                 TO_TIMESTAMP_NTZ(PREFERENCEFIELDS_COEDATE, 'YYYY-MM-DD HH24:MI:SS.0'), NULL) PREFERENCEFIELDS_COEDATE,
+             PREFERENCEFIELDS_PREF_BASISOFADMISSION,
+             PREFERENCEFIELDS_PREF_BASISOFADMISSIONEXPORT
+      FROM ODS.STUDYLINK.STUDYLINK_APPLICATION_COURSE_API_LATEST) V
+WHERE NOT EXISTS(
+        SELECT NULL
+        FROM (SELECT HUB_STUDYLINK_APPLICATION_COURSE_KEY,
+                     HASH_MD5,
+                     LOAD_DTS,
+                     LEAD(LOAD_DTS)
+                          OVER (PARTITION BY HUB_STUDYLINK_APPLICATION_COURSE_KEY ORDER BY LOAD_DTS ASC) EFFECTIVE_END_DTS
+              FROM DATA_VAULT.CORE.SAT_STUDYLINK_APPLICATION_COURSE) S
+        WHERE S.EFFECTIVE_END_DTS IS NULL
+          AND S.HUB_STUDYLINK_APPLICATION_COURSE_KEY = MD5(V.DF_APPLICATIONDETAILS_APPLICATIONID || ',' ||
+                                                           IFNULL(V.PREFERENCEFIELDS_CUSTOMCOURSECODE, ''))
+          AND S.HASH_MD5 = MD5(
+                   IFNULL(DF_APPLICATIONDETAILS_APPLICATIONID, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSENAME, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_CUSTOMCOURSECODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSESUBTITLE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSESUBCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSETYPE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSECAMPUS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSECRICOSCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INSTITUTIONNAME, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INSTITUTIONCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_DEPARTMENTNAME, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_DEPARTMENTCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_DEPARTMENTCODE2, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_NATIONALCOMMENT, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTERNATIONALCOMMENT, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_UACCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSEVERSION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_ALLOWINTERNATIONAL, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_HASQUOTA, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_PREFUID, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_CAMPUSDESC, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_CAMPUSCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKECODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKEDESC, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKE_UNITNUMBER, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKE_YEAR, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_MAJORCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_MAJORDESC, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_AVAILABILITYCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKE_DURATION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INTAKE_STARTDATE, TO_TIMESTAMP_NTZ('1900', 'YYYY')) || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COURSECAMPUSSIMPLE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_AWARDCODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_AWARDDESCRIPTION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_STUDYTYPECODE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_STUDYTYPEDESCRIPTION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INSTITUTIONCUSTOMID, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_INSTITUTIONABBREVIATION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_OFFERPRIORCREDIT, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLCREDITS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLSEMESTERS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLSEMESTERSREMAINING, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLSTATUS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLYEARSREMAINING, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLCOMMENTS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLTYPE, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLTYPEEXPORT, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_RPLUNITS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_ASSESSMENTCOMMENTS, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COENUMBER, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_COEDATE, TO_TIMESTAMP_NTZ('1900', 'YYYY')) || ',' ||
+                   IFNULL(PREFERENCEFIELDS_PREF_BASISOFADMISSION, '') || ',' ||
+                   IFNULL(PREFERENCEFIELDS_PREF_BASISOFADMISSIONEXPORT, '') || ',' ||
+                   IFNULL('N', '')
+           )
+
+    )
+;

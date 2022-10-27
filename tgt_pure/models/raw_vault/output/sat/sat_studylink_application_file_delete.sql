@@ -1,0 +1,3 @@
+-- DELETE
+SELECT '1' DUMMY
+;

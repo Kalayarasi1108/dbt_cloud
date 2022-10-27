@@ -1,0 +1,28 @@
+-- DELETE
+INSERT INTO DATA_VAULT.CORE.SAT_STUDENT_SANCTION (SAT_STUDENT_SANCTION_SK, HUB_STUDENT_SANCTION_KEY, SOURCE, LOAD_DTS,
+                                                  ETL_JOB_ID, HASH_MD5, IS_DELETED)
+SELECT DATA_VAULT.CORE.SEQ.NEXTVAL               SAT_STUDENT_SANCTION_SK,
+       S.HUB_STUDENT_SANCTION_KEY,
+       'AMIS'                                           SOURCE,
+       CURRENT_TIMESTAMP::TIMESTAMP_NTZ           AS    LOAD_DTS,
+       'SQL' || CURRENT_TIMESTAMP::TIMESTAMP_NTZ        ETL_JOB_ID,
+       MD5('')                                    AS    HASH_MD5,
+       'Y'                                        AS   IS_DELETED
+FROM (
+         SELECT HUB_STUDENT_SANCTION_KEY,
+                HASH_MD5,
+                LOAD_DTS,
+                IS_DELETED,
+                LEAD(LOAD_DTS) OVER (PARTITION BY HUB_STUDENT_SANCTION_KEY ORDER BY LOAD_DTS ASC) EFFECTIVE_END_DTS
+         FROM DATA_VAULT.CORE.SAT_STUDENT_SANCTION
+     ) S
+WHERE S.EFFECTIVE_END_DTS IS NULL
+  AND S.IS_DELETED = 'N'
+  AND NOT EXISTS(
+        SELECT NULL
+        FROM ODS.AMIS.S1STU_SANCTION STU_SANCTION
+        WHERE S.HUB_STUDENT_SANCTION_KEY = MD5(IFNULL(STU_SANCTION.STU_ID, '') || ',' ||
+                                               IFNULL(STU_SANCTION.SEQ_NO, 0)
+            )
+    )
+;

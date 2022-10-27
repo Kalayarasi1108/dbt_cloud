@@ -1,0 +1,34 @@
+-- DELETE
+INSERT INTO DATA_VAULT.CORE.SAT_UAC_COURSE (SAT_UAC_COURSE_SK, HUB_UAC_COURSE_KEY, SOURCE,
+                                                     LOAD_DTS, ETL_JOB_ID, HASH_MD5,IS_DELETED)
+
+WITH SAT_UAC_COURSE_LATEST AS (
+    SELECT HUB.HUB_UAC_COURSE_KEY,
+           HUB.SOURCE,
+           SAT.IS_DELETED,
+           LEAD(SAT.LOAD_DTS)
+                OVER (PARTITION BY SAT.HUB_UAC_COURSE_KEY,SAT.HASH_MD5 ORDER BY SAT.LOAD_DTS ASC) EFFECTIVE_END_DTS
+    FROM DATA_VAULT.CORE.SAT_UAC_COURSE SAT
+             JOIN DATA_VAULT.CORE.HUB_UAC_COURSE HUB
+                  ON HUB.HUB_UAC_COURSE_KEY = SAT.HUB_UAC_COURSE_KEY
+)
+SELECT DATA_VAULT.CORE.SEQ.nextval               SAT_UAC_COURSE_SK,
+       S.HUB_UAC_COURSE_KEY,
+       S.SOURCE,
+       CURRENT_TIMESTAMP::TIMESTAMP_NTZ          LOAD_DTS,
+       'SQL' || CURRENT_TIMESTAMP::TIMESTAMP_NTZ ETL_JOB_ID,
+       MD5('')                                   HASH_MD5,
+       'Y'                                       IS_DELETED
+FROM SAT_UAC_COURSE_LATEST S
+
+WHERE S.EFFECTIVE_END_DTS IS NULL
+  AND S.IS_DELETED = 'N'
+  AND NOT EXISTS(
+        SELECT NULL
+        FROM ODS.UAC.VW_ALL_COURSE C
+        WHERE S.HUB_UAC_COURSE_KEY = MD5(
+                    IFNULL(C.COURSE, '') || ',' ||
+                    IFNULL(C.YEAR, '') || ',' ||
+                    IFNULL(C.SOURCE, '')
+            )
+    );

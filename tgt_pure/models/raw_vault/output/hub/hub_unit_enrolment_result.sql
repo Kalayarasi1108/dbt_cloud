@@ -1,0 +1,20 @@
+INSERT INTO DATA_VAULT.CORE.HUB_UNIT_ENROLMENT_RESULT (HUB_UNIT_ENROLMENT_RESULT_KEY, SSP_NO, SEQ_NO, SOURCE, LOAD_DTS,
+                                                       ETL_JOB_ID)
+SELECT MD5(
+                   IFNULL(S1SSP_RSLT_HIST.SSP_NO, 0) || ',' ||
+                   IFNULL(S1SSP_RSLT_HIST.SEQ_NO, 0)
+           )                                       HUB_UNIT_ENROLMENT_RESULT_KEY,
+       S1SSP_RSLT_HIST.SSP_NO,
+       S1SSP_RSLT_HIST.SEQ_NO,
+       'AMIS'                                      SOURCE,
+       CURRENT_TIMESTAMP :: TIMESTAMP_NTZ          LOAD_DTS,
+       'SQL' || CURRENT_TIMESTAMP :: TIMESTAMP_NTZ ETL_JOB_ID
+FROM ODS.AMIS.S1SSP_RSLT_HIST S1SSP_RSLT_HIST
+WHERE NOT EXISTS(
+        SELECT NULL
+        FROM DATA_VAULT.CORE.HUB_UNIT_ENROLMENT_RESULT H
+        WHERE H.HUB_UNIT_ENROLMENT_RESULT_KEY = MD5(
+                    IFNULL(S1SSP_RSLT_HIST.SSP_NO, 0) || ',' ||
+                    IFNULL(S1SSP_RSLT_HIST.SEQ_NO, 0)
+            )
+    );
