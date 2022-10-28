@@ -1,5 +1,3 @@
-INSERT INTO DATA_VAULT.CORE.HUB_COURSE_FEE (HUB_COURSE_FEE_KEY, SPK_CD, SPK_VER_NO, FEE_LIAB_NO, FEE_YR,
-                                            SOURCE, LOAD_DTS, ETL_JOB_ID)
 SELECT MD5(IFNULL(SPK_DET.SPK_CD, '') || ',' ||
            IFNULL(SPK_DET.SPK_VER_NO, 0) || ',' ||
            IFNULL(FEE_DET_1.FEE_LIAB_NO, 0) || ',' ||
@@ -12,7 +10,7 @@ SELECT MD5(IFNULL(SPK_DET.SPK_CD, '') || ',' ||
        'AMIS'                                    SOURCE,
        CURRENT_TIMESTAMP::TIMESTAMP_NTZ          LOAD_DTS,
        'SQL' || CURRENT_TIMESTAMP::TIMESTAMP_NTZ ETL_JOB_ID
-FROM ODS.AMIS.S1SPK_FEE SPK_FEE
+FROM {{source('AMIS','S1SPK_FEE')}} SPK_FEE
          JOIN ODS.AMIS.S1SPK_DET SPK_DET
               ON SPK_DET.SPK_NO = SPK_FEE.SPK_NO
                   AND SPK_DET.SPK_VER_NO = SPK_FEE.SPK_VER_NO
@@ -28,7 +26,7 @@ FROM ODS.AMIS.S1SPK_FEE SPK_FEE
                   AND FEE_DET_1.FEE_YR = FEE_ASSOC_FEE.ASSOC_FEE_YR
          WHERE NOT EXISTS(
               SELECT NULL
-              FROM DATA_VAULT.CORE.HUB_COURSE_FEE H
+              FROM {{source('CORE','HUB_COURSE_FEE')}} H
               WHERE H.HUB_COURSE_FEE_KEY = MD5(IFNULL(SPK_DET.SPK_CD, '') || ',' ||
                                                IFNULL(SPK_DET.SPK_VER_NO, 0) || ',' ||
                                                IFNULL(FEE_DET_1.FEE_LIAB_NO, 0) || ',' ||

@@ -1,5 +1,3 @@
-insert into data_vault.core.hub_course_offering(hub_course_offering_key, spk_cd, spk_ver_no, avail_key_no, avail_yr,
-                                                sprd_cd, location_cd, source, load_dts, etl_job_id)
 with course_offering as (
     select spk_cd,
            sd.spk_ver_no,
@@ -7,7 +5,7 @@ with course_offering as (
            avail_yr,
            sprd_cd,
            location_cd
-    from ods.amis.s1spk_det sd
+    from {{source('AMIS','S1SPK_DET')}} sd
              join ods.amis.s1spk_avail_det sad on sd.spk_no = sad.spk_no
         and sd.spk_ver_no = sad.spk_ver_no
     where spk_cat_cd = 'CS'
@@ -19,7 +17,7 @@ with course_offering as (
                          cs_ssp.avail_yr,
                          cs_ssp.sprd_cd,
                          cs_ssp.location_cd
-         from ods.amis.s1ssp_stu_spk cs_ssp
+         from {{source('AMIS','S1SSP_STU_SPK')}} cs_ssp
                   join ods.amis.s1spk_det cs_spk_det
                        on cs_spk_det.spk_no = cs_ssp.spk_no
                            and cs_spk_det.spk_ver_no = cs_ssp.spk_ver_no
@@ -53,7 +51,7 @@ with course_offering as (
          from combined_course_offering
          where not exists(
              select null
-             from data_vault.core.hub_course_offering h
+             from {{source('CORE','hub_course_offering')}} h
              where h.hub_course_offering_key = md5(
                      ifnull(combined_course_offering.spk_cd, '') || ',' ||
                      ifnull(combined_course_offering.spk_ver_no, 0) || ',' ||

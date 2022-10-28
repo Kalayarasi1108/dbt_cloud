@@ -1,9 +1,3 @@
-INSERT INTO DATA_VAULT.CORE.HUB_STUDYLINK_APPLICATION_COURSE (HUB_STUDYLINK_APPLICATION_COURSE_KEY,
-                                                              APPLICATIONID,
-                                                              COURSE_CODE,
-                                                              SOURCE,
-                                                              LOAD_DTS,
-                                                              ETL_JOB_ID)
 SELECT MD5(A.APPLICATIONID || ',' ||
            IFNULL(A.COURSE_CODE, ''))            HUB_STUDYLINK_APPLICATION_COURSE_KEY,
        A.APPLICATIONID                           APPLICATIONID,
@@ -14,7 +8,7 @@ SELECT MD5(A.APPLICATIONID || ',' ||
 FROM (
          SELECT DF_APPLICATIONDETAILS_APPLICATIONID APPLICATIONID,
                 PREFERENCEFIELDS_CUSTOMCOURSECODE   COURSE_CODE
-         FROM ODS.STUDYLINK.STUDYLINK_APPLICATION_COURSE_API_LATEST
+         FROM {{source('STUDYLINK','STUDYLINK_APPLICATION_COURSE_API_LATEST')}}
          UNION
          SELECT APPLICATIONID, COURSE_CODE
          FROM (
@@ -25,7 +19,7 @@ FROM (
                                 3, ENG_S1_CODE,
                                 4, GCGD_S1_CODE,
                                 5, SAE_S1_CODE) COURSE_CODE
-                  FROM ODS.STUDYLINK.STUDYLINK_APPLICATION_CSV_EXTRACT A
+                  FROM {{source('STUDYLINK','STUDYLINK_APPLICATION_CSV_EXTRACT')}} A
                            JOIN (
                       SELECT 0 SEQ
                       UNION ALL
@@ -55,7 +49,7 @@ FROM (
      ) E ) A
 WHERE NOT EXISTS (
     SELECT 1
-    FROM DATA_VAULT.CORE.HUB_STUDYLINK_APPLICATION_COURSE S
+    FROM {{source('CORE','HUB_STUDYLINK_APPLICATION_COURSE')}} S
     WHERE S.HUB_STUDYLINK_APPLICATION_COURSE_KEY = MD5(A.APPLICATIONID || ',' ||
     A.COURSE_CODE)
     );

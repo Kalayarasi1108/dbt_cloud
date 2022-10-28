@@ -1,5 +1,3 @@
-INSERT INTO DATA_VAULT.CORE.HUB_COURSE_APPLICATION(HUB_COURSE_APPLICATION_KEY, STU_ID, SPK_NO,
-                                                                  SPK_VER_NO, APPN_NO, SOURCE, ETL_JOB_ID, LOAD_DTS)
 SELECT HUB_COURSE_APPLICATION_KEY,
        STU_ID,
        SPK_NO,
@@ -30,7 +28,7 @@ FROM (
                          'AMIS'                                                  SOURCE,
                          CURRENT_TIMESTAMP::TIMESTAMP_NTZ                        LOAD_DTS,
                          'SQL' || CURRENT_TIMESTAMP::TIMESTAMP_NTZ               ETL_JOB_ID
-                  FROM ODS.AMIS.S1APP_APPLICATION as a
+                  FROM {{SOURCE('AMIS','S1APP_APPLICATION')}} as a
                            INNER JOIN ODS.AMIS.S1APP_APPLICATION_LINE as l on a.application_id = l.application_id
                            INNER JOIN ODS.AMIS.S1APP_STUDY as s on l.application_id = s.application_id
                       and s.application_line_id = l.application_line_id
@@ -40,6 +38,6 @@ FROM (
      ) as D
 WHERE NOT EXISTS(
         SELECT 1
-        FROM DATA_VAULT.CORE.HUB_COURSE_APPLICATION as h
+        FROM {{SOURCE('CORE','HUB_COURSE_APPLICATION')}}as h
         where h.hub_course_application_key = d.hub_course_application_key
     );

@@ -1,5 +1,3 @@
-insert into DATA_VAULT.CORE.HUB_EN_HISTORICAL (HUB_EN_HISTORICAL_KEY, STUDENT_IDENTIFICATION_CODE,
-                                               COURSE_CODE, SOURCE, LOAD_DTS, ETL_JOB_ID)
 SELECT distinct MD5(IFNULL(en.STUDENT_IDENTIFICATION_CODE, '') || ',' ||
                     IFNULL(en.COURSE_CODE, '')
                     )                                     as HUB_EN_HISTORICAL_KEY,
@@ -8,7 +6,7 @@ SELECT distinct MD5(IFNULL(en.STUDENT_IDENTIFICATION_CODE, '') || ',' ||
                 'AMIS'                                    as SOURCE,
                 CURRENT_TIMESTAMP::TIMESTAMP_NTZ          as LOAD_DTS,
                 'SQL' || CURRENT_TIMESTAMP::TIMESTAMP_NTZ as ETL_JOB_ID
-FROM ods.en_ll.staging_en as en
+FROM {{source('en_ll','staging_en')}}as en
          left join DATA_VAULT.CORE.HUB_EN_HISTORICAL as target on
             MD5(IFNULL(en.STUDENT_IDENTIFICATION_CODE, '') || ',' ||
                 IFNULL(en.COURSE_CODE, '')

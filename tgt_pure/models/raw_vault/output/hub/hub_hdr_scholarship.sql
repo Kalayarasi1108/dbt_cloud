@@ -1,6 +1,3 @@
-INSERT INTO DATA_VAULT.CORE.HUB_HDR_SCHOLARSHIP(HUB_HDR_SCHOLARSHIP_KEY, STU_ID, COURSE_SPK_CD, COURSE_SPK_NO,
-                                                PARENT_SSP_NO, SCHOLARSHIP_YEAR, SCHOLARSHIP_CODE, SOURCE,
-                                                LOAD_DTS, ETL_JOB_ID)
 select MD5(IFNULL(CS_SSP.STU_ID, '') || ',' ||
            IFNULL(CS_SPK.SPK_CD, '') || ',' ||
            IFNULL(CS_SPK.SPK_NO, 0) || ',' ||
@@ -17,11 +14,11 @@ select MD5(IFNULL(CS_SSP.STU_ID, '') || ',' ||
        'AMIS'                                    SOURCE,
        CURRENT_TIMESTAMP::TIMESTAMP_NTZ          LOAD_DTS,
        'SQL' || CURRENT_TIMESTAMP::TIMESTAMP_NTZ ETL_JOB_ID
-from ODS.AMIS.S1SSP_STU_SPK CS_SSP
+from {{source('AMIS','S1SSP_STU_SPK')}} CS_SSP
          JOIN (SELECT SSP_NO,
                       COALESCE(MAX(DECODE(SSP_DT_TYPE_CD, 'COS', EXPECTED_DATE)),
                                MAX(DECODE(SSP_DT_TYPE_CD, 'STRT', EXPECTED_DATE))) COURSE_START_DATE
-               FROM ODS.AMIS.S1SSP_DATE DT
+               FROM {{source('AMIS','S1SSP_DATE')}} DT
                WHERE DT.SSP_DT_TYPE_CD IN ('COS', 'STRT')
                GROUP BY SSP_NO
 ) COURSE_START
@@ -38,7 +35,7 @@ from ODS.AMIS.S1SSP_STU_SPK CS_SSP
            COMM.CMT_CD,
            ROW_NUMBER() OVER (PARTITION BY COMM.STU_ID, COMM.SPK_NO, COMM.SPK_VER_NO,
                COMM.AVAIL_YR, COMM.CMT_CD ORDER BY COMM.STU_CMT_EFFCT_DT) RN
-    FROM ODS.AMIS.S1STU_COMMENT COMM
+    FROM {{source('AMIS','S1STU_COMMENT')}}  COMM
              JOIN ODS.AMIS.S1CMT_DET CMT_DET
                   ON CMT_DET.CMT_CD = COMM.CMT_CD AND CMT_DET.CMT_TYPE_CD = 'SCHPG'
 ) SCHOL_COMM
@@ -55,7 +52,7 @@ WHERE CS_SSP.SSP_NO = CS_SSP.PARENT_SSP_NO
   AND CS_SSP.LIAB_CAT_CD NOT IN ('NX')
   AND NOT EXISTS(
         SELECT NULL
-        FROM DATA_VAULT.CORE.HUB_HDR_SCHOLARSHIP H
+        FROM {{source('CORE','HUB_HDR_SCHOLARSHIP')}} H
         WHERE H.HUB_HDR_SCHOLARSHIP_KEY =
               MD5(IFNULL(CS_SSP.STU_ID, '') || ',' ||
                   IFNULL(CS_SPK.SPK_CD, '') || ',' ||
